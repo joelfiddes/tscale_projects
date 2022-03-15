@@ -1,3 +1,14 @@
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!config.yml
+!run.py
+
+# ...even if they are in subdirectories
+!*/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
