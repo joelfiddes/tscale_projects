@@ -10,7 +10,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 # you need to be in sim directory to run code
-os.chdir("/home/joel/sim/topoPyscale_davos")
+os.chdir("/home/joel/sim/tscale_projects/davos")
 
 # temp keuyword to skip modis section
 MODISprocess=False
@@ -18,6 +18,10 @@ MODISprocess=False
 startTime = datetime.now()
 config_file = './config.yml'
 mp = tc.Topoclass(config_file)
+wdir = mp.config.project.directory
+
+
+
 mp.compute_dem_param()
 mp.extract_topo_param()
 
@@ -31,6 +35,10 @@ mp.toposub.write_landform()
 mp.compute_solar_geometry()
 mp.compute_horizon()
 mp.downscale_climate()
+
+grid_stack = sim.topo_map_forcing(mp.downscaled_pts.t)
+sim.write_ncdf(wdir, grid_stack, "T", "K", "air_temperature", mp.downscaled_pts.time)
+
 mp.to_fsm()
 
 # Simulate FSM
@@ -63,7 +71,7 @@ startDA = "2018-03-01"
 endDA = "2018-07-31"
 perturb, perturb_uncor = da.ensemble_pars_gen(ensemb_size)
 ensemb_type = "TP"
-wdir = mp.config.project.directory
+
 sdThresh = 5  # threshold for conversion to fSCA in cm
 
 # generate perturbation parameters
